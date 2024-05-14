@@ -8,16 +8,6 @@ This project is a Flutter application that implements a login page using Firebas
 - **CAPTCHA Verification**: After phone number verification, the user is directed to a CAPTCHA page to confirm they are not a robot.
 - **Firebase Integration**: The app uses Firebase for phone number authentication and verification.
 
-## Screenshots
-
-*(Include some screenshots of your app here)*
-
-![Login Page](Screenshots/Login_page.jpeg)
-*Description of the login page screenshot.*
-
-![CAPTCHA Verification](Screenshots/Otp.jpeg)
-*Description of the CAPTCHA verification screenshot.*
-
 ## Usage
 
 1. Open the app on your device or emulator.
