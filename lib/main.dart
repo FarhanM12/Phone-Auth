@@ -4,12 +4,12 @@ import 'package:phoneauth/controllers/auth_service.dart';
 import 'package:phoneauth/firebase_options.dart';
 import 'package:phoneauth/pages/home_page.dart';
 import 'package:phoneauth/pages/login_page.dart';
+import 'package:phoneauth/pages/admin_login_page.dart'; // Import the new admin login page
 
-void main()async {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp
-    (
-    options:DefaultFirebaseOptions.currentPlatform,
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
   );
 
   runApp(const MyApp());
@@ -18,54 +18,61 @@ void main()async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
-
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.yellowAccent),
         useMaterial3: true,
       ),
-      home: CheckUserLoggedInOrNot()
+      // Define named routes
+      routes: {
+        '/': (context) => const CheckUserLoggedInOrNot(),
+        '/login': (context) => const LoginPage(),
+        '/admin_login': (context) => AdminLoginPage(), // Route to the new admin login page
+        '/home': (context) => const Homepage(),
+      },
+      initialRoute: '/',
     );
   }
-
 }
+
 class CheckUserLoggedInOrNot extends StatefulWidget {
   const CheckUserLoggedInOrNot({super.key});
 
   @override
-  State<CheckUserLoggedInOrNot> createState() => _CheckUserLoggedInOState();
+  State<CheckUserLoggedInOrNot> createState() => _CheckUserLoggedInOrNotState();
 }
 
-class _CheckUserLoggedInOState extends State<CheckUserLoggedInOrNot> {
+class _CheckUserLoggedInOrNotState extends State<CheckUserLoggedInOrNot> {
   @override
   void initState() {
-    AuthService.isLoggedIn().then((value) {
-        if(value)
-          {
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> Homepage()));
-          }
-        else
-          {
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> Loginpage()));
-          }
-    });
-    // TODO: implement initState
     super.initState();
+
+    // Check if the user is logged in
+    _checkLoginStatus();
   }
+
+  void _checkLoginStatus() async {
+    bool isLoggedIn = await AuthService.isLoggedIn();
+
+    if (isLoggedIn) {
+      // Navigate to home if logged in
+      Navigator.pushReplacementNamed(context, '/home');
+    } else {
+      // Navigate to admin login if not logged in
+      Navigator.pushReplacementNamed(context, '/admin_login');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       body: Center(child: CircularProgressIndicator()),
     );
   }
 }
-
-
-
 
 
